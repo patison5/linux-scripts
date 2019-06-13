@@ -1,0 +1,94 @@
+#!/bin/bash
+#cd ~/Desktop;
+
+motherBoardFile="motherboard.txt"
+processorFile="processor.txt"
+memoryFile="memory.txt"
+
+
+
+clearAllFiles () {
+    if [ -f $memoryFile ] ; then
+        rm $memoryFile
+    fi
+
+
+    if [ -f $motherBoardFile ] ; then
+        rm $motherBoardFile
+    fi
+
+
+    if [ -f $processorFile ] ; then
+        rm $processorFile
+    fi
+}
+
+#read flags and params
+while [ -n "$1" ]; do
+    
+    if [ "$1" == "-help" ] ; then 
+        echo ""
+        echo "########################################################"
+        echo ""
+        echo "-memory       ---    for memory info"
+        echo "-processor    ---    for processor info"
+        echo "-mother       ---    for motherboard info"
+        echo "-clear        ---    for cleaing the directory"
+        echo ""
+        echo "########################################################"
+        echo ""
+        break
+    fi
+
+    if [ "$1" == "-clear" ] ; then 
+        echo "All files have been removed!"
+        clearAllFiles
+        break
+    fi
+
+    if [ "$1" == "-memory" ] ; then
+        memory=$(dmidecode --type memory)
+
+        echo "I have been created a new file 'memory.txt' with relevant info"
+
+        if [ -f $memoryFile ] ; then
+            rm $memoryFile
+        fi
+
+        echo "$memory" >> $memoryFile
+
+
+
+    elif [ "$1" == "-mother" ] ; then
+        motherBoard=$(dmidecode --type baseboard)
+
+        echo "I have been created a new file 'mortherBoard.txt' with relevant info"
+
+        if [ -f $motherBoardFile ] ; then
+            rm $motherBoardFile
+        fi
+
+        echo "$motherBoard" >> $motherBoardFile 
+
+
+
+    elif [ "$1" == "-processor" ] ; then
+        processor=$(dmidecode --type processor)
+
+        echo "I have been created a new file 'processor.txt' with relevant info"
+        
+        if [ -f $processorFile ] ; then
+            rm $processorFile
+        fi
+
+        echo "$processor" >> $processorFile 
+
+
+    else
+        echo "Your command is incorrect!"
+        clearAllFiles
+        break
+    fi
+
+  shift
+done
